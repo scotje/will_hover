@@ -1,4 +1,4 @@
-Are you tried of writing onmouseover= and onmouseout= for hover states?
+Are you tired of writing onmouseover= and onmouseout= for hover states?
  
 How to use: Include Prototype and this file. Add "will_hover" class to any
 img tag that you want to have a hover state. Name hover state graphics
