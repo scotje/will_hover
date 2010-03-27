@@ -18,40 +18,33 @@
 if ( typeof Prototype !== 'undefined' ) {
 	document.observe("dom:loaded", function() {
 		$$('.will_hover').each(function(el, index) {
-			Event.observe(el, 'mouseover', wh_over);
-			Event.observe(el, 'mouseout', wh_out);
+			Event.observe(el, 'mouseover', function() {
+				var ext = this.src.split('.').reverse().first();
+				this.src = this.src.replace('.' + ext, '-hover.' + ext);
+			});
+			
+			Event.observe(el, 'mouseout', function() {
+				var ext = this.src.split('.').reverse().first();
+				this.src = this.src.replace('-hover.' + ext, '.' + ext);
+			});
 		});
 	
 		$$('.will_hover_bg').each(function(el, index) {
-			Event.observe(el, 'mouseover', wh_bg_over);
-			Event.observe(el, 'mouseout', wh_bg_out);
+			Event.observe(el, 'mouseover', function() {
+				var ext = this.getStyle('background-image').replace(/^url\(/, '').replace(/\)$/, '').split('.').reverse().first();
+				this.setStyle({
+					backgroundImage: this.getStyle('background-image').replace('.' + ext, '-hover.' + ext)
+				});
+			});
+			
+			Event.observe(el, 'mouseout', function() {
+				var ext = this.getStyle('background-image').replace(/^url\(/, '').replace(/\)$/, '').split('.').reverse().first();
+				this.setStyle({
+					backgroundImage: this.getStyle('background-image').replace('-hover.' + ext, '.' + ext)
+				});
+			});
 		});
 	});
-
-	function wh_over(event) {
-		var ext = this.src.split('.').reverse().first();
-		this.src = this.src.replace('.' + ext, '-hover.' + ext);
-	}
-
-	function wh_out(event) {
-		var ext = this.src.split('.').reverse().first();
-		this.src = this.src.replace('-hover.' + ext, '.' + ext);
-	}
-	
-
-	function wh_bg_over(event) {
-		var ext = this.getStyle('background-image').replace(/^url\(/, '').replace(/\)$/, '').split('.').reverse().first();
-		this.setStyle({
-			backgroundImage: this.getStyle('background-image').replace('.' + ext, '-hover.' + ext)
-		});
-	}
-
-	function wh_bg_out(event) {
-		var ext = this.getStyle('background-image').replace(/^url\(/, '').replace(/\)$/, '').split('.').reverse().first();
-		this.setStyle({
-			backgroundImage: this.getStyle('background-image').replace('-hover.' + ext, '.' + ext)
-		});
-	}
 } else if ( typeof jQuery !== 'undefined' ) {
 	$(document).ready(function() {
 		$('.will_hover').bind({
@@ -87,7 +80,6 @@ if ( typeof Prototype !== 'undefined' ) {
 				});
 			}
 		});
-		
 	});
 } else {
 	alert('will_hover.js requires Prototype or jQuery.');
