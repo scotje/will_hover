@@ -1,13 +1,13 @@
 Are you tired of writing onmouseover= and onmouseout= for hover states?
- 
-How to use: Include Prototype and this file. Add "will_hover" class to any
-img tag that you want to have a hover state. Name hover state graphics
-with "-hover" at the end of the file name. Like "about.png" and 
+
+How to use: Include Prototype or jQuery and this file. Add "will_hover" 
+class to any IMG tag that you want to have a hover state. Name hover state 
+graphics with "-hover" at the end of the file name. Like "about.png" and 
 "about-hover.png".
- 
+
 New bonus feature! Add "will_hover_bg" class to any element with a CSS
 background image that you want to have a hover state. Name the graphics
-following the same convention shown above.
+following the convention shown above.
 
 Created By: Jesse C Scott (jesse.c.scott AT gmail.com)
 Released into the public domain, no copyright is claimed on this work.
