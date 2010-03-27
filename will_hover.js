@@ -1,9 +1,9 @@
 /*****************************************************************************
 * Are you tired of writing onmouseover= and onmouseout= for hover states?
 * 
-* How to use: Include Prototype and this file. Add "will_hover" class to any
-* img tag that you want to have a hover state. Name hover state graphics with
-* "-hover" at the end of the file name. Like "about.png" and 
+* How to use: Include Prototype or jQuery and this file. Add "will_hover" 
+* class to any IMG tag that you want to have a hover state. Name hover state 
+* graphics with "-hover" at the end of the file name. Like "about.png" and 
 * "about-hover.png".
 * 
 * New bonus feature! Add "will_hover_bg" class to any element with a CSS
@@ -15,38 +15,80 @@
 * 
 *****************************************************************************/
 
-document.observe("dom:loaded", function() {
-	$$('.will_hover').each(function(el, index) {
-		Event.observe(el, 'mouseover', wh_over);
-		Event.observe(el, 'mouseout', wh_out);
-	});
+if ( typeof Prototype !== 'undefined' ) {
+	document.observe("dom:loaded", function() {
+		$$('.will_hover').each(function(el, index) {
+			Event.observe(el, 'mouseover', wh_over);
+			Event.observe(el, 'mouseout', wh_out);
+		});
 	
-	$$('.will_hover_bg').each(function(el, index) {
-		Event.observe(el, 'mouseover', wh_bg_over);
-		Event.observe(el, 'mouseout', wh_bg_out);
+		$$('.will_hover_bg').each(function(el, index) {
+			Event.observe(el, 'mouseover', wh_bg_over);
+			Event.observe(el, 'mouseout', wh_bg_out);
+		});
 	});
-});
 
-function wh_over(event) {
-	var ext = this.src.split('.').reverse().first();
-	this.src = this.src.replace('.' + ext, '-hover.' + ext);
-}
+	function wh_over(event) {
+		var ext = this.src.split('.').reverse().first();
+		this.src = this.src.replace('.' + ext, '-hover.' + ext);
+	}
 
-function wh_bg_over(event) {
-	var ext = this.getStyle('background-image').replace(/^url\(/, '').replace(/\)$/, '').split('.').reverse().first();
-	this.setStyle({
-		backgroundImage: this.getStyle('background-image').replace('.' + ext, '-hover.' + ext)
+	function wh_out(event) {
+		var ext = this.src.split('.').reverse().first();
+		this.src = this.src.replace('-hover.' + ext, '.' + ext);
+	}
+	
+
+	function wh_bg_over(event) {
+		var ext = this.getStyle('background-image').replace(/^url\(/, '').replace(/\)$/, '').split('.').reverse().first();
+		this.setStyle({
+			backgroundImage: this.getStyle('background-image').replace('.' + ext, '-hover.' + ext)
+		});
+	}
+
+	function wh_bg_out(event) {
+		var ext = this.getStyle('background-image').replace(/^url\(/, '').replace(/\)$/, '').split('.').reverse().first();
+		this.setStyle({
+			backgroundImage: this.getStyle('background-image').replace('-hover.' + ext, '.' + ext)
+		});
+	}
+} else if ( typeof jQuery !== 'undefined' ) {
+	$(document).ready(function() {
+		$('.will_hover').bind({
+			mouseover: function() {
+				var ext = this.src.split('.').reverse();
+				ext = ext[0];
+				this.src = this.src.replace('.' + ext, '-hover.' + ext);
+			},
+			
+			mouseout: function() {
+				var ext = this.src.split('.').reverse();
+				ext = ext[0];
+				this.src = this.src.replace('-hover.' + ext, '.' + ext);
+			}
+		});
+		
+		$('.will_hover_bg').bind({
+			mouseover: function() {
+				var ext = $(this).css('background-image').replace(/^url\(/, '').replace(/\)$/, '').split('.').reverse();
+				ext = ext[0];
+
+				$(this).css({
+					'background-image': $(this).css('background-image').replace('.' + ext, '-hover.' + ext)
+				});
+			},
+			
+			mouseout: function() {
+				var ext = $(this).css('background-image').replace(/^url\(/, '').replace(/\)$/, '').split('.').reverse();
+				ext = ext[0];
+				
+				$(this).css({
+					'background-image': $(this).css('background-image').replace('-hover.' + ext, '.' + ext)
+				});
+			}
+		});
+		
 	});
-}
-
-function wh_out(event) {
-	var ext = this.src.split('.').reverse().first();
-	this.src = this.src.replace('-hover.' + ext, '.' + ext);
-}
-
-function wh_bg_out(event) {
-	var ext = this.getStyle('background-image').replace(/^url\(/, '').replace(/\)$/, '').split('.').reverse().first();
-	this.setStyle({
-		backgroundImage: this.getStyle('background-image').replace('-hover.' + ext, '.' + ext)
-	});
+} else {
+	alert('will_hover.js requires Prototype or jQuery.');
 }
